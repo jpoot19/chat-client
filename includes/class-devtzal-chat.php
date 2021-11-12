@@ -3,7 +3,7 @@
  * @package DevtzalChat
  */
 
- class DevtzalClat{
+ class DevtzalChat{
       /**
    * The loader that's responsible for maintaining and registering all hooks that power
    * the plugin.
@@ -48,8 +48,8 @@
           $this->plugin_name = 'devtzal-chat';
       
           $this->load_dependencies();
-          $this->set_locale();
-          $this->define_admin_hooks();
+        //   $this->set_locale();
+        //   $this->define_admin_hooks();
           $this->define_public_hooks();
       
         }

@@ -1,8 +1,9 @@
 <template>
     <div>
-        <button class="chat-support-btn" v-on:click="showWidget()" v-if="!showChat">
+        <chat-button v-on:click="showWidget()" v-if="!showChat" />
+        <!-- <button class="chat-support-btn" v-on:click="showWidget()" v-if="!showChat">
             <ChatIcon style="width:24px"></ChatIcon>
-        </button>
+        </button> -->
         <div class="widget" v-if="showChat">
             <div class="chat-window">
                 <div class="chat-header bar">
@@ -49,9 +50,9 @@
 </template>
 
 <script>
-    import ChatIcon from './icons/Comment-alt-regular.vue';
+    // import ChatIcon from './icons/Comment-alt-regular.vue';
     import SendIcon from './icons/Paper-Plane-Solid.vue';
-    
+    import ChatButton from './ChatButton.vue';
     import TimesIcon from './icons/Times-Solid.vue';
     import AuthComponent from './Auth.vue';
     import BusinessHours from './BusinessHoursContainer.vue';
@@ -62,14 +63,15 @@
     export default {
         name: 'Chat',
         components:{
-            ChatIcon,
+            // ChatIcon,
             SendIcon,
             TimesIcon,
             AuthComponent,
             Loading,
             NotificationContainer,
             BusinessHours,
-            WhatsappButton
+            WhatsappButton,
+            ChatButton
         },
         data(){
             return {
@@ -98,7 +100,11 @@
            
             scroll() {
                 if(this.isUserAuth){
-                    document.getElementById('box').scrollTop = document.getElementById('box').scrollHeight;
+                    var scrollItem = document.getElementById('box');
+                    if(scrollItem != null){
+                        document.getElementById('box').scrollTop = scrollItem.scrollHeight;
+                    }
+                     
                 }
                 
             },
@@ -211,9 +217,7 @@
         background: #FFF;
         bottom: 5em;
     }
-
     
-
     .middle{
         position: absolute;
         width: 100%;
@@ -222,7 +226,6 @@
         background: var(--background);
         overflow-y: auto;
     }
-
     .chat-window .messages{
         /* padding: 1rem; */
 		background: var(--background);
@@ -334,14 +337,10 @@
         right: 1em;
         bottom: 1.3em;
     }
-
     .chat-support-btn:focus {
         transform: scale(1.1);
         transform: rotate(45deg);
         -ms-transform: rotate(45deg);
         -webkit-transform: rotate(45deg);
     }
-
-
 </style>
-

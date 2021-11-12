@@ -65,5 +65,6 @@
           
             wp_register_script('vuejs', plugin_dir_url( __FILE__ ).'client/dist/js/app.js?r='.rand(), true);
             wp_register_script('vuejs1', plugin_dir_url( __FILE__ ).'client/dist/js/chunk-vendors.js?r='.rand(), true);
+            
         }
  }

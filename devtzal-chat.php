@@ -50,6 +50,30 @@ register_deactivation_hook( __FILE__, 'deactivate_devtzal_chat' );
 
 require plugin_dir_path( __FILE__ ) . 'includes/class-devtzal-chat.php';
 
+/**
+ * Begins execution of the plugin.
+ *
+ * Since everything within the plugin is registered via hooks,
+ * then kicking off the plugin from this point in the file does
+ * not affect the page life cycle.
+ *
+ * @since    1.0.0
+ */
+function run_devtzal_chat() {
+
+	$plugin = new DevtzalChat();
+	$plugin->run();
+
+}
+run_devtzal_chat();
+
+function build_chat() {
+    wp_enqueue_script('vuejs');
+    wp_enqueue_script('vuejs1');
+    return '<div id ="app-chat"></div>';
+}
+
+add_shortcode('chat', 'build_chat');
 
 
 
