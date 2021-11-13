@@ -1,7 +1,8 @@
 export const namespaced = true
 
 export const state = {
-    notifications: []
+    notifications: [],
+    claro: 'Estoy en el modulo de notificvzciones'
 }
 
 let nextId = 1;

@@ -7,7 +7,7 @@ export const state = {
     roomInstance: false,
     receiver:{},
     greetingMessage: 'En un momento uno de nuestros agentes te atenderá',
-    channel: '',
+   
     privateInstance: false,
     messages:[],
     enabledChat:false
@@ -30,21 +30,24 @@ export const mutations = {
     SET_PUBLIC_INSTANCE(state, instance){
         state.roomInstance = instance;
     },
-    SET_CHANNEL(state, data){
-        state.channel = data.channel;
+    SET_ENABLED_CHAT(state, data){
+        state.enabledChat = data;
+    }
+    // SET_CHANNEL(state, data){
+    //     state.channel = data.channel;
   
-        state.roomInstance.private(state.channel).listen('ChatEvent', (event) => {
-          state.messages.push({
-            message:event.message.message,
-            user: event.user
-          });
-          state.receiver = event.user;
-          state.enabledChat = true;
-        });
-        // const audio = new Audio("./assets/media/notification.mp3");                
-        // audio.play();
+    //     // state.roomInstance.private(state.channel).listen('ChatEvent', (event) => {
+    //     //   state.messages.push({
+    //     //     message:event.message.message,
+    //     //     user: event.user
+    //     //   });
+    //     //   state.receiver = event.user;
+    //     //   state.enabledChat = true;
+    //     // });
+    //     // const audio = new Audio("./assets/media/notification.mp3");                
+    //     // audio.play();
   
-      }
+    //   }
 }
 
 
@@ -65,8 +68,18 @@ export const actions = {
         //  commit("SET_MESSAGES", res.data);
 
     },
+    
     playNotificationAlert(){
         const audio = new Audio("./assets/media/notification.mp3");                
         audio.play();
+    },
+    incommingMessages({commit}, message){
+        commit("SET_MESSAGE", message.message, message.user);
+
     }
+}
+
+
+export const getters = {
+    
 }

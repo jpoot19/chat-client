@@ -1,10 +1,10 @@
 <template>
   <div>
-    <!-- <div v-if="$store.state.isUserAuth">
+    <div v-if="$store.state.isUserAuth">
       <div>{{$store.state.user}}</div>
       <div>{{$store.state.authToken}}</div>
-       <div>{{$store.state.chat.channel}}</div>
-   </div> -->
+       <div>{{$store.state.channel}}</div>
+   </div>
   
     <Chat></Chat>
   

@@ -94,7 +94,9 @@
             this.isLoading= !this.enabledChat;
             this.updateAgentName();
             this.scroll();
-            // this.listenPrivateChannel();
+           
+            this.listenRoomChannel();
+            // this.connectToPrivateChannel(this.privateChannel);
         },
         methods:{
            
@@ -138,14 +140,55 @@
                 }
                 return isValid;
             },
-            listenPrivateChannel(){
+            listenRoomChannel(){
                 if(this.isUserAuth)
                 {
-                     this.$store.dispatch('chat/JoinToPrivateChannel');
-                    // console.log(this.privateInstance);
+
+                    this.roomInstance.join('chat').here(user => {
+                        console.log('Here...');
+                        console.log(user);
+                    }).joining(user => {
+                        console.log('Joining...');
+                        console.log(user);
+                    });
+
+                    console.log(this.privateChannel);
+                    if(this.privateChannel == null || this.privateChannel == '')
+                    {
+                        this.roomInstance.private(`chat.greet.${this.user.uuid}`).listen('GreetEvent', (event) => {
+                            console.log("Estoy esperando el saludo");
+                            // console.log(event);
+                            this.$store.dispatch('UpdatePrivateChannel',event); 
+                             this.connectToPrivateChannel(event.channel);          
+                        });
+                       
+
+                    }
+                    
+
                 }
                 
             },
+            connectToPrivateChannel(channel){
+                 console.log("conectado a " + channel);
+                if(channel != null && channel != ''){
+                    console.log("conectado a " + channel);
+                    this.roomInstance.private(channel).listen('ChatEvent', (event) => {
+                        
+                        this.$store.dispatch('chat/incommingMessages',event); 
+                    //         // state.messages.push({
+                    //         //     message:event.message.message,
+                    //         //     user: event.user
+                    //         // });
+                    //     // state.receiver = event.user;
+                    //     // state.enabledChat = true;
+                         });
+                        // const audio = new Audio("./assets/media/notification.mp3");                
+                        // audio.play();
+                }
+                // console.log(this.privateChannel);
+            },
+
             updateAgentName(){
                 if(this.receiver != null){
                     if(this.receiver.name != null){
@@ -155,6 +198,7 @@
                     
                 }
             },
+
             //  playSound(){
             //      const audio = new Audio("./assets/media/notification.mp3");                
             //     audio.play();
@@ -169,30 +213,31 @@
             user(){
                 return this.$store.state.user;
             },
-            Echo(){
-                return this.$store.state.Echo;
-            },
+           
             isUserAuth(){
                 return this.$store.state.isUserAuth;
             },
-            privateInstance(){
-                return this.$store.getters['chat/getRoomInstance'];
+            roomInstance(){
+                return this.$store.getters['connectToChatRoom'];
             },
-            GreetMessage(){
-                return this.$store.state.greetingMessage;
+            privateChannel(){
+                return this.$store.getters['privateChannel'];
             },
+            // GreetMessage(){
+            //     return this.$store.state.greetingMessage;
+            // },
             Messages(){
                 return this.$store.state.chat.messages;
             },
             enabledChat(){
                 return this.$store.state.chat.enabledChat;
             },
-            receiver(){
-                return this.$store.state.chat.receiver;
-            },
-            channel(){
-                return this.$store.state.chat.channel;
-            }
+            // receiver(){
+            //     return this.$store.state.chat.receiver;
+            // },
+            // channel(){
+            //     return this.$store.state.chat.channel;
+            // }
             
         }
     }
