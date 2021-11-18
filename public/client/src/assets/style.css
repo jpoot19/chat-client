@@ -362,6 +362,23 @@ color: #42b983 !important;
     opacity: .5;
 }
 
+#app-chat .incomming-msg-notification{
+    background-color: red;
+    border-radius: 100%;
+    width: 1.7em !important;
+    height: 1.7em !important;
+    font-size: 12px;
+    padding: initial;
+    position: absolute;
+    top: 4.5em;
+    right: 1em;
+    outline: none !important;
+     color: #FFF !important;
+     display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 @keyframes moveOpen 
 {
     0% {

@@ -14,6 +14,7 @@ const apiClient = axios.create({
 export default{
     fetchMessages(){
         const authToken = store.state.authToken ?? null;
+        // console.log(store.state.chat.receiver.uuid);
         return apiClient.get(`chat/${store.state.chat.receiver.uuid}/messages`,{
             headers:{
                 'Authorization': 'Bearer '+ authToken

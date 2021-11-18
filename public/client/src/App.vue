@@ -1,11 +1,20 @@
 <template>
   <div>
-    <div v-if="$store.state.isUserAuth">
+    <!-- <div v-if="$store.state.isUserAuth">
       <div>{{$store.state.user}}</div>
       <div>{{$store.state.authToken}}</div>
        <div>{{$store.state.channel}}</div>
-   </div>
-  
+   </div> -->
+<!-- <audio
+          ref="audio"
+          preload="auto"
+          volume="0.1"
+          muted
+          loop
+        >
+          <source src="@/assets/notification.mp3" />
+        </audio> -->
+
     <Chat></Chat>
   
   </div>
@@ -13,6 +22,7 @@
 
 <script>
 import Chat from './components/Chat.vue'
+
 
 export default {
   name: 'App',

@@ -67,4 +67,8 @@
             wp_register_script('vuejs1', plugin_dir_url( __FILE__ ).'client/dist/js/chunk-vendors.js?r='.rand(), true);
             
         }
+
+        public function enqueue_media(){
+            wp_enqueue_media('media_notification', plugin_dir_url( __FILE__ ).'client/dist/media/notification.mp3' );
+        }
  }

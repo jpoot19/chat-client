@@ -22,10 +22,10 @@
                          <loading v-model:active="isLoading" :is-full-page="false" />
 
                             <div class="messages " v-for="message in Messages" :key="message.id">     
-                                <div class="message sender" v-if="message.user.id != user.id">
-                                    {{message.message}}
+                                <div class="message sender" v-if="message.user.uuid != user.uuid">
+                                    {{message.message}} 
                                 </div>
-                                <div class="message receiver" v-if="message.user.id == user.id">
+                                <div class="message receiver" v-if="message.user.uuid == user.uuid">
                                     {{message.message}}
                                 </div>
                             </div>
@@ -50,7 +50,6 @@
 </template>
 
 <script>
-    // import ChatIcon from './icons/Comment-alt-regular.vue';
     import SendIcon from './icons/Paper-Plane-Solid.vue';
     import ChatButton from './ChatButton.vue';
     import TimesIcon from './icons/Times-Solid.vue';
@@ -59,11 +58,10 @@
     import WhatsappButton from './WhatsappButton.vue';
     import NotificationContainer from '@/components/NotificationContainer.vue'
     import Loading from 'vue-loading-overlay';
-    // import {mapGetters} from 'vuex';
     export default {
         name: 'Chat',
         components:{
-            // ChatIcon,
+ 
             SendIcon,
             TimesIcon,
             AuthComponent,
@@ -81,22 +79,21 @@
                 users:[],
                 fullPage: true,
                 isLoading: !this.enabledChat,
-                agentName: 'Chatea con un Agente'
+                agentName: 'Chatea con un Agente',
+                connectedToPrivate: false,
             }
         },
         created(){
             this.fetchMessages();
+            this.listenRoomChannel();
             
         },
-        mounted() {
-        },
+        
         updated() {
             this.isLoading= !this.enabledChat;
             this.updateAgentName();
             this.scroll();
-           
             this.listenRoomChannel();
-            // this.connectToPrivateChannel(this.privateChannel);
         },
         methods:{
            
@@ -116,15 +113,15 @@
             fetchMessages(){
                 if(this.enabledChat){
                     this.$store.dispatch('chat/FetchMessages');
-                    // console.log(this.Messages);
+
                 }
                 
-            //    this.messages = res.data;
             },
             sendMessage(){
                 let isValidForm = this.validateForm();
                 if(isValidForm){
-                    this.$store.dispatch('chat/SendMessage',this.newMessage, this.user);
+
+                    this.$store.dispatch('chat/SendMessage',this.newMessage);
                     this.newMessage = '';
 
                 }else{
@@ -132,7 +129,6 @@
                 }
             },
             validateForm(){
-                // this.errorMsgs =[];
                 let isValid = true;
                 if(this.newMessage === ''){
                      this.errorMsgs.push('Message is empty');
@@ -143,7 +139,6 @@
             listenRoomChannel(){
                 if(this.isUserAuth)
                 {
-
                     this.roomInstance.join('chat').here(user => {
                         console.log('Here...');
                         console.log(user);
@@ -152,17 +147,29 @@
                         console.log(user);
                     });
 
-                    console.log(this.privateChannel);
                     if(this.privateChannel == null || this.privateChannel == '')
                     {
                         this.roomInstance.private(`chat.greet.${this.user.uuid}`).listen('GreetEvent', (event) => {
-                            console.log("Estoy esperando el saludo");
-                            // console.log(event);
+
                             this.$store.dispatch('UpdatePrivateChannel',event); 
                              this.connectToPrivateChannel(event.channel);          
                         });
                        
 
+                    }
+                    else{
+                        if(this.enabledChat)
+                        {
+                            // let currentChannel = this.roomInstance.connector.channels;
+                            // console.log(currentChannel);
+                            if(!this.connectedToPrivate)
+                            {
+                                  this.connectToPrivateChannel(this.privateChannel);
+                            }
+                           
+                            // console.log(this.roomInstance);
+                        }
+                       
                     }
                     
 
@@ -170,23 +177,16 @@
                 
             },
             connectToPrivateChannel(channel){
-                 console.log("conectado a " + channel);
+
                 if(channel != null && channel != ''){
-                    console.log("conectado a " + channel);
                     this.roomInstance.private(channel).listen('ChatEvent', (event) => {
-                        
+                        console.log("entre a añadir mensajes");
                         this.$store.dispatch('chat/incommingMessages',event); 
-                    //         // state.messages.push({
-                    //         //     message:event.message.message,
-                    //         //     user: event.user
-                    //         // });
-                    //     // state.receiver = event.user;
-                    //     // state.enabledChat = true;
-                         });
-                        // const audio = new Audio("./assets/media/notification.mp3");                
-                        // audio.play();
+                    });
+                    this.connectedToPrivate = true;
+
                 }
-                // console.log(this.privateChannel);
+              
             },
 
             updateAgentName(){
@@ -199,10 +199,7 @@
                 }
             },
 
-            //  playSound(){
-            //      const audio = new Audio("./assets/media/notification.mp3");                
-            //     audio.play();
-            //  }
+        
            
 
             
@@ -211,7 +208,7 @@
         computed:{
             // ...mapGetters(["getRoomInstance"]),
             user(){
-                return this.$store.state.user;
+                return this.$store.getters['getUser'];
             },
            
             isUserAuth(){
@@ -223,21 +220,14 @@
             privateChannel(){
                 return this.$store.getters['privateChannel'];
             },
-            // GreetMessage(){
-            //     return this.$store.state.greetingMessage;
-            // },
+  
             Messages(){
                 return this.$store.state.chat.messages;
             },
             enabledChat(){
                 return this.$store.state.chat.enabledChat;
             },
-            // receiver(){
-            //     return this.$store.state.chat.receiver;
-            // },
-            // channel(){
-            //     return this.$store.state.chat.channel;
-            // }
+       
             
         }
     }

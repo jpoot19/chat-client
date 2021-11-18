@@ -1,27 +1,30 @@
 import ChatService from '@/services/ChatService.js'
+
 import store from '@/store/index'
 export const namespaced = true
-
+export const notificationSound = require("@/assets/notification.mp3");
 export const state = {
     // user:{},
-    roomInstance: false,
+    // roomInstance: false,
     receiver:{},
-    greetingMessage: 'En un momento uno de nuestros agentes te atenderá',
+    // greetingMessage: 'En un momento uno de nuestros agentes te atenderá',
    
-    privateInstance: false,
+    // privateInstance: false,
     messages:[],
     enabledChat:false
 }
 
 export const mutations = {
     SET_RECEIVER(state, data){
-        state.receiver = data.data;
+        state.receiver = data;
+        state.enabledChat = true;
     },
     SET_MESSAGE(state, data){
-        // console.log(store.state.user);
+
+        // var index = state.messages.findIndex( x => x.message.id ==)
         state.messages.push({
             message: data.message,
-            user: store.state
+            user: data.user
         });
     },
     SET_MESSAGES(state, data){
@@ -33,48 +36,45 @@ export const mutations = {
     SET_ENABLED_CHAT(state, data){
         state.enabledChat = data;
     }
-    // SET_CHANNEL(state, data){
-    //     state.channel = data.channel;
-  
-    //     // state.roomInstance.private(state.channel).listen('ChatEvent', (event) => {
-    //     //   state.messages.push({
-    //     //     message:event.message.message,
-    //     //     user: event.user
-    //     //   });
-    //     //   state.receiver = event.user;
-    //     //   state.enabledChat = true;
-    //     // });
-    //     // const audio = new Audio("./assets/media/notification.mp3");                
-    //     // audio.play();
-  
-    //   }
 }
 
 
 export const actions = {
-    async SendMessage({commit}, message, user){
+    async SendMessage({commit}, message){
         let data = {
             message:message,
-            user:user
+            user:store.state.user
         };
-        commit("SET_MESSAGE", data);
+ 
+       commit("SET_MESSAGE", data);
+       
         
         await ChatService.sendMessage(message);
        
     },
-    async FetchMessages(){
+    async FetchMessages({commit}){
         var res = await ChatService.fetchMessages();
-        console.log(res);
-        //  commit("SET_MESSAGES", res.data);
+        commit("SET_MESSAGES",res.data);
+        // console.log("ESTE TRAE LOS MENSAJES");
+        // console.log(res);
 
     },
     
     playNotificationAlert(){
-        const audio = new Audio("./assets/media/notification.mp3");                
+        const audio = new Audio(notificationSound);
+        console.log(audio);                
         audio.play();
     },
-    incommingMessages({commit}, message){
-        commit("SET_MESSAGE", message.message, message.user);
+    incommingMessages({commit, dispatch}, message){
+        let data = {
+            message:message.message.message,
+            user:message.user
+        };
+        // console.log(data);
+
+        commit("SET_MESSAGE", data);
+        commit("SET_RECEIVER", message.user);
+        dispatch("playNotificationAlert",{ root: true });
 
     }
 }
