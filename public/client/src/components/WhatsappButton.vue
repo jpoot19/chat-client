@@ -14,7 +14,7 @@
          },
          data(){
              return {
-                 whatsappUrl: "https://api.whatsapp.com/send?phone=+5219984001812"
+                 whatsappUrl: "https://api.whatsapp.com/send?phone=+529982932574"
              }
          },
          methods: {
