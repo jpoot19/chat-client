@@ -13,7 +13,7 @@
 font-family: Avenir, Helvetica, Arial, sans-serif !important;
 -webkit-font-smoothing: antialiased !important;
 -moz-osx-font-smoothing: grayscale !important;
-text-align: center !important;
+/* text-align: center !important; */
 color: #2c3e50 !important;
 }
 
