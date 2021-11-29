@@ -28,6 +28,22 @@
                                 <div class="message receiver" v-if="message.user.uuid == user.uuid">
                                     {{message.message}}
                                 </div>
+                                <div class="option-wrapper">
+                                    <div class="chat-option"> 
+                                        Conoce más sobre estudiar en el extranjero   
+                                    </div>
+                                </div>
+                                 <div class="option-wrapper">
+                                     <div class="chat-option">
+                                        Buscar Programas
+                                    </div>
+                                 </div>
+                                <div class="option-wrapper">
+                                    <div class="chat-option">
+                                        Solo estoy navegando
+                                    </div>
+                                </div>
+                                
                             </div>
                     </div>                    
                 </div>
@@ -236,7 +252,25 @@
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css?family=Red+Hat+Display:400,500,900&display=swap');
-    
+    .chat-option{
+        display: inline-block;
+        border: 1px solid rgba(14, 114, 237, 0.45);
+        line-height: 20px;
+        border-radius: 8px;
+        padding: 7px 13px;
+        margin: 0px;
+        box-sizing: border-box;
+        background-color: #FFF;
+        color: rgb(14, 114, 237);
+        cursor: pointer;
+        transition: background-color 50ms ease-in-out 0s, border-color 100ms ease-in-out 0s;
+        white-space: normal;
+        text-align: left;
+        
+    }
+    .option-wrapper{
+        margin: 8px 8px 0 8px;
+    }
     .chat-window{
         position: fixed;
         display: flex;
