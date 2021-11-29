@@ -19,7 +19,7 @@
                 <div v-if="isUserAuth">
 
                     <div class="middle" ref="formContainer"  v-chat-scroll id="box">
-                         <loading v-model:active="isLoading" :is-full-page="false" />
+                         <!-- <loading v-model:active="isLoading" :is-full-page="false" /> -->
 
                             <div class="messages " v-for="message in Messages" :key="message.id">     
                                 <div class="message sender" v-if="message.user.uuid != user.uuid">
@@ -28,6 +28,7 @@
                                 <div class="message receiver" v-if="message.user.uuid == user.uuid">
                                     {{message.message}}
                                 </div>
+                               
                             </div>
                     </div>                    
                 </div>
@@ -57,7 +58,7 @@
     import BusinessHours from './BusinessHoursContainer.vue';
     import WhatsappButton from './WhatsappButton.vue';
     import NotificationContainer from '@/components/NotificationContainer.vue'
-    import Loading from 'vue-loading-overlay';
+    // import Loading from 'vue-loading-overlay';
     export default {
         name: 'Chat',
         components:{
@@ -65,7 +66,7 @@
             SendIcon,
             TimesIcon,
             AuthComponent,
-            Loading,
+            // Loading,
             NotificationContainer,
             BusinessHours,
             WhatsappButton,
@@ -84,6 +85,7 @@
             }
         },
         created(){
+            this.initWidget();
             this.fetchMessages();
             this.listenRoomChannel();
             
@@ -106,6 +108,9 @@
                      
                 }
                 
+            },
+            initWidget(){
+                this.$store.dispatch('initWidget');
             },
             showWidget(){
                 this.showChat = !this.showChat;
@@ -136,6 +141,9 @@
                 }
                 return isValid;
             },
+
+
+
             listenRoomChannel(){
                 if(this.isUserAuth)
                 {
@@ -147,30 +155,35 @@
                         console.log(user);
                     });
 
-                    if(this.privateChannel == null || this.privateChannel == '')
-                    {
-                        this.roomInstance.private(`chat.greet.${this.user.uuid}`).listen('GreetEvent', (event) => {
+                    this.roomInstance.private(`chatbot.${this.user.uuid}.${process.env.VUE_APP_BOT_ID}`).listen('ChatbotEvent', (event) =>{
+                        console.log(event);
+                    });
+                    console.log(`chatbot.${this.user.uuid}.${process.env.VUE_APP_BOT_ID}`);
 
-                            this.$store.dispatch('UpdatePrivateChannel',event); 
-                             this.connectToPrivateChannel(event.channel);          
-                        });
+                    // if(this.privateChannel == null || this.privateChannel == '')
+                    // {
+                    //     this.roomInstance.private(`chat.greet.${this.user.uuid}`).listen('GreetEvent', (event) => {
+
+                    //         this.$store.dispatch('UpdatePrivateChannel',event); 
+                    //          this.connectToPrivateChannel(event.channel);          
+                    //     });
                        
 
-                    }
-                    else{
-                        if(this.enabledChat)
-                        {
-                            // let currentChannel = this.roomInstance.connector.channels;
-                            // console.log(currentChannel);
-                            if(!this.connectedToPrivate)
-                            {
-                                  this.connectToPrivateChannel(this.privateChannel);
-                            }
+                    // }
+                    // else{
+                    //     if(this.enabledChat)
+                    //     {
+                    //         // let currentChannel = this.roomInstance.connector.channels;
+                    //         // console.log(currentChannel);
+                    //         if(!this.connectedToPrivate)
+                    //         {
+                    //               this.connectToPrivateChannel(this.privateChannel);
+                    //         }
                            
-                            // console.log(this.roomInstance);
-                        }
+                    //         // console.log(this.roomInstance);
+                    //     }
                        
-                    }
+                    // }
                     
 
                 }
@@ -196,6 +209,8 @@
                         this.agentName = this.receiver.name + " " + surname;
                     }
                     
+                }else{
+                    this.agentName = this.bot.name;
                 }
             },
 
@@ -219,6 +234,10 @@
             },
             privateChannel(){
                 return this.$store.getters['privateChannel'];
+            },
+            
+            bot(){
+                return this.$store.getters['getBot'];
             },
   
             Messages(){

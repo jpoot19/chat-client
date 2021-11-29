@@ -1,5 +1,6 @@
 
 import AuthService from '@/services/AuthService.js'
+import WidgetService from '@/services/WidgetService.js'
 import * as chat from '@/store/modules/chat.js';
 import { createStore } from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
@@ -8,18 +9,23 @@ window.Pusher = require('pusher-js');
 import * as notification from '@/store/modules/notification.js'
 
 const persistent = new createPersistedState({
-  paths: ['user', 'channel', 'isUserAuth','authToken', 'chat']
+  paths: ['user','bot', 'channel', 'isUserAuth','authToken', 'chat']
 });
 
 export default createStore({
   state: {
     user:{},
+    bot:{},
     isUserAuth: false,
     authToken:null,
     isLoading: false,
     channel: '',
+
   },
   mutations: {
+    SET_BOT(state, data){
+      state.bot = data.data;
+    },
     SET_USER(state, data){
       state.user = data.data;
       state.authToken = data.token;
@@ -37,6 +43,14 @@ export default createStore({
 
   },
   actions: {
+    async initWidget({commit}){
+      var response = await WidgetService.InitWindow();
+      var res = response.data;
+      commit("SET_BOT", res);
+
+      console.log(response);
+      return true;
+    },
     async authUser({ commit, dispatch }, user){
         var response = await AuthService.AuthenticateUser(user.name,user.surname, user.email, user.phone);
 
@@ -113,6 +127,9 @@ export default createStore({
     },
     getUser: state => {
       return state.user;
+    },
+    getBot: state => {
+      return state.bot;
     }
   },
   modules: {

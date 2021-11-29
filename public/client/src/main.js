@@ -12,3 +12,4 @@ require("./assets/style.css")
 
 createApp(App).use(store).use(router).use(VueChatScroll).use(VueLoading).mount('#app-chat');
 
+console.log(process.env.VUE_APP_BOT_ID);

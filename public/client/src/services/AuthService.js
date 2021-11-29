@@ -9,6 +9,12 @@ const apiClient = axios.create({
 });
 
 export default{
+
+    // InitWindow(){
+    //     console.log(process.env.VUE_APP_BOT_TOKEN);
+    //     return apiClient.get(`bot/${process.env.VUE_APP_BOT_TOKEN}`);
+    // },
+
     AuthenticateUser(name, surname, email, phone){
         var request = {
             name: name,
@@ -17,9 +23,11 @@ export default{
             phone: phone,
             password:'chat-widget',
             password_confirmation: 'chat-widget',
+            bot_id: process.env.VUE_APP_BOT_ID,
             
         };
         console.log(request);
         return apiClient.post('auth/register', request);
     }
+
 }
