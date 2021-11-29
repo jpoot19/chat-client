@@ -227,6 +227,9 @@
             enabledChat(){
                 return this.$store.state.chat.enabledChat;
             },
+             receiver(){
+                return this.$store.state.chat.receiver;
+            },
        
             
         }

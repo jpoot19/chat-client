@@ -6,7 +6,6 @@ Description: Chatbot Client
 Version: 1.0
 Author: Devtzal
 Text Domain: devtzal-chat
-Domain Path: /languages
 */
 
 

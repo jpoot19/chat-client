@@ -83,7 +83,7 @@ color: #42b983 !important;
     width: 20em !important;
     /* width: 350px !important; */
     height: 33em !important;
-    z-index: 2 !important;
+    z-index: 10012 !important;
     right: 1.5em !important;
     box-sizing: border-box !important;
     border-radius: 1em !important;
@@ -94,8 +94,8 @@ color: #42b983 !important;
 #app-chat .middle{
     position: absolute !important;
     width: 100% !important;
-    top:10em !important;
-    height: 58% !important;
+    top:12em !important;
+    height: 50% !important;
     background: var(--background) !important;
 }
 
