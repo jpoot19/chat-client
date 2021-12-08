@@ -8,8 +8,8 @@
 </template>
 
 <script>
- import ChatIcon from './icons/Comment-alt-regular.vue';
- import IncommingMsgNotification from './IncomingMessagesNotification.vue';
+ import ChatIcon from '@/components/icons/Comment-alt-regular.vue';
+ import IncommingMsgNotification from '@/components/buttons/IncomingMessagesNotification.vue';
  export default {
         name: 'ChatButton',
         components:{

@@ -49,20 +49,19 @@ export const actions = {
        commit("SET_MESSAGE", data);
        
         
-        await ChatService.sendMessage(message);
+        await ChatService.sendBotMessage(message);
        
     },
     async FetchMessages({commit}){
         var res = await ChatService.fetchMessages();
         commit("SET_MESSAGES",res.data);
-        // console.log("ESTE TRAE LOS MENSAJES");
-        // console.log(res);
+       
 
     },
     
     playNotificationAlert(){
         const audio = new Audio(notificationSound);
-        console.log(audio);                
+        // console.log(audio);                
         audio.play();
     },
     incommingMessages({commit, dispatch}, message){
@@ -70,13 +69,17 @@ export const actions = {
             message:message.message.message,
             user:message.user
         };
-        // console.log(data);
 
         commit("SET_MESSAGE", data);
         commit("SET_RECEIVER", message.user);
         dispatch("playNotificationAlert",{ root: true });
 
-    }
+    },
+    enabledChat({commit}, data){
+        // console.log("se habilita el chat");
+        commit("SET_ENABLED_CHAT",data);
+    },
+    
 }
 
 

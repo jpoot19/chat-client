@@ -2,6 +2,7 @@
 import AuthService from '@/services/AuthService.js'
 import WidgetService from '@/services/WidgetService.js'
 import * as chat from '@/store/modules/chat.js';
+import * as botModule from '@/store/modules/bot.js';
 import { createStore } from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
 import Echo from 'laravel-echo';
@@ -20,6 +21,7 @@ export default createStore({
     authToken:null,
     isLoading: false,
     channel: '',
+    
 
   },
   mutations: {
@@ -48,7 +50,7 @@ export default createStore({
       var res = response.data;
       commit("SET_BOT", res);
 
-      console.log(response);
+      // console.log(response);
       return true;
     },
     async authUser({ commit, dispatch }, user){
@@ -78,7 +80,7 @@ export default createStore({
             timeout: true,
           }
           dispatch('notification/add', notification, { root: true });
-          console.log("usuario NO registrado");
+          // console.log("usuario NO registrado");
           return false;
         }
 
@@ -86,7 +88,7 @@ export default createStore({
 
     },
     async UpdatePrivateChannel({commit}, channel){
-      console.log(channel);
+      // console.log(channel);
       commit("SET_CHANNEL", channel);
     },
     activateLoading({ commit }){
@@ -134,7 +136,8 @@ export default createStore({
   },
   modules: {
     chat,
-    notification
+    notification,
+    botModule
   },
   plugins: [persistent],
 })

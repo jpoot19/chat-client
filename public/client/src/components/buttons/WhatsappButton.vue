@@ -5,7 +5,7 @@
 </template>
 
 <script>
-    import WhatsappIcon from './icons/Whatsapp-brands.vue';
+    import WhatsappIcon from '@/components/icons/Whatsapp-brands.vue';
     // require('./asses')
     export default{
          name: 'WhatsappButton',

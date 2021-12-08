@@ -32,6 +32,56 @@ export default{
                 'Authorization': 'Bearer '+ authToken
             }
         });
+    },
+    sendBotMessage(userToken,tag, userInput){
+        const authToken = store.state.authToken ?? null;
+       
+        let request = {}
+        if(typeof userInput !== 'undefined'){
+            request ={
+                tag: tag,
+                user_input: userInput,
+                user_token: userToken
+            }
+        }else{
+            request = {
+                tag: tag,
+                user_token: userToken
+            }
+        }
+
+         
+        return apiClient.post(`bot/${process.env.VUE_APP_BOT_ID}/messages`, request,{
+            headers:{
+                'Authorization': 'Bearer '+ authToken
+            }
+        });
+    },
+    sendTag(data){
+        const authToken = store.state.authToken ?? null;
+        // console.log(data);
+        // let request ={
+        //     tag: data.tag,
+        //     user_token: data.user_token
+        // };
+        return apiClient.post(`bot/${process.env.VUE_APP_BOT_ID}/options`,data,{
+            headers:{
+                'Authorization': 'Bearer '+ authToken
+            }
+        });
+    },
+    startConversation(){
+        const authToken = store.state.authToken ?? null;
+        let request = {
+            botId:process.env.VUE_APP_BOT_ID
+        }
+        return apiClient.post(`bot/${store.state.user.uuid}/chatbot`,request,{
+            headers:{
+                'Authorization': 'Bearer '+ authToken
+            }
+        });
+
     }
+
 
 }

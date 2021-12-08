@@ -16,9 +16,7 @@
         },
         methods: {
             listenIncommingMsgs(){
-                console.log("estoy aqui");
-                console.log(this.isUserAuth);
-                console.log(this.privateChannel);
+         
                 if(this.isUserAuth && (this.privateChannel != null && this.privateChannel != "")){
                     this.connectionInstance.private(this.privateChannel).listen('ChatEvent', (event) => {
                         console.log("Estoy esoperando el evento");

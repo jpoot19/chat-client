@@ -20,7 +20,7 @@
 </template>
 
 <script>
-    import HeadsetIcon from './icons/Headset-solid.vue';
+    import HeadsetIcon from '@/components/icons/Headset-solid.vue';
     export default {
         name: 'BusinessHours',
         components:{

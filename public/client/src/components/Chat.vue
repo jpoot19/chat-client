@@ -22,26 +22,18 @@
                          <!-- <loading v-model:active="isLoading" :is-full-page="false" /> -->
 
                             <div class="messages " v-for="message in Messages" :key="message.id">     
-                                <div class="message sender" v-if="message.user.uuid != user.uuid">
+                                <div class="message sender" v-if="message.user.uuid != user.uuid && message.message != null">
                                     {{message.message}} 
                                 </div>
                                 <div class="message receiver" v-if="message.user.uuid == user.uuid">
                                     {{message.message}}
                                 </div>
-                                <div class="option-wrapper">
-                                    <div class="chat-option"> 
-                                        Conoce más sobre estudiar en el extranjero   
-                                    </div>
-                                </div>
-                                 <div class="option-wrapper">
-                                     <div class="chat-option">
-                                        Buscar Programas
-                                    </div>
-                                 </div>
-                                <div class="option-wrapper">
-                                    <div class="chat-option">
-                                        Solo estoy navegando
-                                    </div>
+                                <div v-if="message.options != null && message.user.uuid != user.uuid">
+                                    <option-button
+                                        v-for="option in message.options"
+                                        :key="option.tag"
+                                        :option="option"
+                                     />
                                 </div>
                                 
                             </div>
@@ -67,12 +59,14 @@
 
 <script>
     import SendIcon from './icons/Paper-Plane-Solid.vue';
-    import ChatButton from './ChatButton.vue';
+    import ChatButton from './buttons/ChatButton.vue';
     import TimesIcon from './icons/Times-Solid.vue';
     import AuthComponent from './Auth.vue';
-    import BusinessHours from './BusinessHoursContainer.vue';
-    import WhatsappButton from './WhatsappButton.vue';
-    import NotificationContainer from '@/components/NotificationContainer.vue'
+    import BusinessHours from '@/components/buttons/BusinessHoursContainer.vue';
+    import WhatsappButton from '@/components/buttons/WhatsappButton.vue';
+    import NotificationContainer from '@/components/NotificationContainer.vue';
+    import OptionButton from '@/components/buttons/OptionButton.vue';
+
     // import Loading from 'vue-loading-overlay';
     export default {
         name: 'Chat',
@@ -85,7 +79,8 @@
             NotificationContainer,
             BusinessHours,
             WhatsappButton,
-            ChatButton
+            ChatButton,
+            OptionButton,
         },
         data(){
             return {
@@ -103,6 +98,7 @@
             this.initWidget();
             this.fetchMessages();
             this.listenRoomChannel();
+            console.log(this.Messages);
             
         },
         
@@ -127,6 +123,13 @@
             initWidget(){
                 this.$store.dispatch('initWidget');
             },
+            initConversation(){
+                if(!this.enabledChat)
+                {
+                    this.$store.dispatch('botModule/establishCommunication');
+                }
+                 
+            },
             showWidget(){
                 this.showChat = !this.showChat;
             },
@@ -141,7 +144,17 @@
                 let isValidForm = this.validateForm();
                 if(isValidForm){
 
-                    this.$store.dispatch('chat/SendMessage',this.newMessage);
+                    // verificar si hay un siguiente tag
+                    if(this.nextTag != null || this.nextTag != ''){
+
+                        let data = {
+                            tag: this.nextTag,
+                            user_input: this.newMessage
+                        };
+                        this.$store.dispatch('botModule/sendMessage',data);
+
+                    }
+                    
                     this.newMessage = '';
 
                 }else{
@@ -170,46 +183,46 @@
                         console.log(user);
                     });
 
-                    this.roomInstance.private(`chatbot.${this.user.uuid}.${process.env.VUE_APP_BOT_ID}`).listen('ChatbotEvent', (event) =>{
-                        console.log(event);
-                    });
-                    console.log(`chatbot.${this.user.uuid}.${process.env.VUE_APP_BOT_ID}`);
 
-                    // if(this.privateChannel == null || this.privateChannel == '')
-                    // {
-                    //     this.roomInstance.private(`chat.greet.${this.user.uuid}`).listen('GreetEvent', (event) => {
-
-                    //         this.$store.dispatch('UpdatePrivateChannel',event); 
-                    //          this.connectToPrivateChannel(event.channel);          
-                    //     });
+                    if(this.privateChannel == null || this.privateChannel == '')
+                    {
                        
-
-                    // }
-                    // else{
-                    //     if(this.enabledChat)
-                    //     {
-                    //         // let currentChannel = this.roomInstance.connector.channels;
-                    //         // console.log(currentChannel);
-                    //         if(!this.connectedToPrivate)
-                    //         {
-                    //               this.connectToPrivateChannel(this.privateChannel);
-                    //         }
+                        let chatbotChannel = {
+                            channel: `chatbot.${this.user.uuid}.${process.env.VUE_APP_BOT_ID}`
+                        }
+                        this.$store.dispatch('UpdatePrivateChannel',chatbotChannel);     
+                        this.connectToPrivateChannel(this.privateChannel);
+                          //Mandar confimación de que ya se estableció la comunicación
+                        this.initConversation();
+                        
+                       
+                          
+                    }
+                    else{
+                        
+                        if(this.enabledChat)
+                        {
+                            
+                            if(!this.connectedToPrivate)
+                            {
+                                  this.connectToPrivateChannel(this.privateChannel);
+                            }
                            
-                    //         // console.log(this.roomInstance);
-                    //     }
+                        }
                        
-                    // }
+                    }
                     
 
                 }
                 
             },
             connectToPrivateChannel(channel){
-
                 if(channel != null && channel != ''){
-                    this.roomInstance.private(channel).listen('ChatEvent', (event) => {
-                        console.log("entre a añadir mensajes");
-                        this.$store.dispatch('chat/incommingMessages',event); 
+
+                    this.roomInstance.private(channel).listen('ChatbotEvent', (event) => {
+                        console.log(event);
+                       this.$store.dispatch('botModule/botMessages', event); 
+                       
                     });
                     this.connectedToPrivate = true;
 
@@ -254,9 +267,15 @@
             bot(){
                 return this.$store.getters['getBot'];
             },
+
+            nextTag(){
+                return this.$store.getters['botModule/getNextToken'];
+            },
   
             Messages(){
-                return this.$store.state.chat.messages;
+                //Return de mensajes normales
+                // return this.$store.state.chat.messages;
+                return this.$store.state.botModule.messages;
             },
             enabledChat(){
                 return this.$store.state.chat.enabledChat;
@@ -270,25 +289,7 @@
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css?family=Red+Hat+Display:400,500,900&display=swap');
-    .chat-option{
-        display: inline-block;
-        border: 1px solid rgba(14, 114, 237, 0.45);
-        line-height: 20px;
-        border-radius: 8px;
-        padding: 7px 13px;
-        margin: 0px;
-        box-sizing: border-box;
-        background-color: #FFF;
-        color: rgb(14, 114, 237);
-        cursor: pointer;
-        transition: background-color 50ms ease-in-out 0s, border-color 100ms ease-in-out 0s;
-        white-space: normal;
-        text-align: left;
-        
-    }
-    .option-wrapper{
-        margin: 8px 8px 0 8px;
-    }
+   
     .chat-window{
         position: fixed;
         display: flex;

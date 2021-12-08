@@ -14,8 +14,7 @@ const apiClient = axios.create({
 export default
 {
     InitWindow(){
-        console.log(process.env.VUE_APP_BOT_TOKEN);
-        console.log(process.env.VUE_APP_BOT_ID);
         return apiClient.get(`bot/${process.env.VUE_APP_BOT_ID}`);
     },
+    
 }

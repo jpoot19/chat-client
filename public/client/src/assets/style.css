@@ -379,6 +379,29 @@ color: #42b983 !important;
     justify-content: center;
 }
 
+/*
+    Bot options
+*/
+#app-chat .chat-option{
+    display: inline-block;
+    border: 1px solid rgba(14, 114, 237, 0.45);
+    line-height: 20px;
+    border-radius: 8px;
+    padding: 7px 13px;
+    margin: 0px;
+    box-sizing: border-box;
+    background-color: #FFF;
+    color: rgb(14, 114, 237);
+    cursor: pointer;
+    transition: background-color 50ms ease-in-out 0s, border-color 100ms ease-in-out 0s;
+    white-space: normal;
+    text-align: left;
+    
+}
+#app-chat .option-wrapper{
+    margin: 8px 8px 0 8px;
+}
+
 @keyframes moveOpen 
 {
     0% {
