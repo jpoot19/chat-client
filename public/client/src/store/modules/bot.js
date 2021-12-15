@@ -112,6 +112,25 @@ export const actions = {
               return false;
         }
     },
+    async fetchMessages({commit}){
+        var res = await ChatService.fetchMessages();
+        console.log(res);
+        let messages = res.data;
+        console.log(messages);
+
+        messages.forEach(message => {
+            let data = {
+                messages:message.message,
+                options: null,
+                video: null,
+                user:message.senderable
+            };
+            commit("SET_MESSAGES_BOT",data);
+        });
+       
+    },
+
+
     botMessages({commit}, event){
 
         //Validar evento
@@ -120,9 +139,9 @@ export const actions = {
         let video = '';
 
         messages = event.message.messages;
-        console.log(event.message);
+        console.log(event.message.options);
         if(typeof event.message.options !== 'undefined'){
-            options = event.options;
+            options = event.message.options;
         }
         if(typeof event.message.video !== 'undefined'){
             video = event.video

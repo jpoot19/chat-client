@@ -135,7 +135,8 @@
             },
             fetchMessages(){
                 if(this.enabledChat){
-                    this.$store.dispatch('chat/FetchMessages');
+
+                    this.$store.dispatch('botModule/fetchMessages');
 
                 }
                 

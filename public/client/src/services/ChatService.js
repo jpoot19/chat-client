@@ -12,14 +12,23 @@ const apiClient = axios.create({
 });
 
 export default{
-    fetchMessages(){
+    // fetchMessages(){
+    //     const authToken = store.state.authToken ?? null;
+    //     // console.log(store.state.chat.receiver.uuid);
+    //     return apiClient.get(`chat/${store.state.chat.receiver.uuid}/messages`,{
+    //         headers:{
+    //             'Authorization': 'Bearer '+ authToken
+    //         }
+    //     });
+    // },
+
+     fetchMessages(){
         const authToken = store.state.authToken ?? null;
-        // console.log(store.state.chat.receiver.uuid);
-        return apiClient.get(`chat/${store.state.chat.receiver.uuid}/messages`,{
+        return apiClient.get(`bot/${process.env.VUE_APP_BOT_ID}/messages`,{
             headers:{
                 'Authorization': 'Bearer '+ authToken
             }
-        });
+        })
     },
     sendMessage(newMessage){
 
