@@ -116,6 +116,9 @@ color: #42b983 !important;
     width: fit-content !important;
     max-width: 66% !important;       
     box-shadow: 0 0 2em rgb(0 0 0 / 8%), 0em 1em 1em -1em rgb(0 0 0 / 10%) !important;
+    text-align: left;
+    word-break: break-word;
+    line-height: 1.5em;
 }
 #app-chat .chat-window .messages .message.receiver{
     margin: 1em 1em 1em auto  !important;
