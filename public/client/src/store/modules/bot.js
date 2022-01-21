@@ -95,6 +95,7 @@ export const actions = {
         
         let response = await ChatService.sendBotMessage(userToken, message.tag, message.user_input);
         let res = response.data;
+        console.log(res);
         if(res.status === 'success'){
             // if(res.data.next_tag != null || res.data.next_tag == ''){
             //     commit("SET_NEXT_TAG", res.data.next_tag);

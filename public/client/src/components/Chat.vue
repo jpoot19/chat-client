@@ -28,6 +28,11 @@
                                 <div class="message receiver" v-if="message.user.uuid == user.uuid">
                                     {{message.message}}
                                 </div>
+                                <div v-if="message.video != null && message.user.uuid != user.uuid " >
+                                    <!-- {{message.video}} -->
+                                    <youtube :url="message.video"></youtube>
+                                    
+                                </div>
                                 <div v-if="message.options != null && message.user.uuid != user.uuid">
                                     <option-button
                                         v-for="option in message.options"
@@ -66,7 +71,7 @@
     import WhatsappButton from '@/components/buttons/WhatsappButton.vue';
     import NotificationContainer from '@/components/NotificationContainer.vue';
     import OptionButton from '@/components/buttons/OptionButton.vue';
-
+    import Youtube from '@/components/YouTube.vue';
     // import Loading from 'vue-loading-overlay';
     export default {
         name: 'Chat',
@@ -81,6 +86,7 @@
             WhatsappButton,
             ChatButton,
             OptionButton,
+            Youtube
         },
         data(){
             return {
