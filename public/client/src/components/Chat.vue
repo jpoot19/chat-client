@@ -28,7 +28,7 @@
                                 <div class="message receiver" v-if="message.user.uuid == user.uuid">
                                     {{message.message}}
                                 </div>
-                                <div v-if="message.video != null && message.user.uuid != user.uuid " >
+                                <div v-if="message.video != null && message.user.uuid != user.uuid && message.video != '' " >
                                     <!-- {{message.video}} -->
                                     <youtube :url="message.video"></youtube>
                                     

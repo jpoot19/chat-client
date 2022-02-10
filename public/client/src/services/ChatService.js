@@ -42,7 +42,7 @@ export default{
             }
         });
     },
-    sendBotMessage(userToken,tag, userInput){
+    sendBotMessage(userToken,tag, userInput, category, subcategory){
         const authToken = store.state.authToken ?? null;
        
         let request = {}
@@ -52,7 +52,15 @@ export default{
                 user_input: userInput,
                 user_token: userToken
             }
-        }else{
+        }
+        else if(typeof category !== 'undefined'){
+            request ={
+                category: category,
+                subcategory: subcategory,
+                user_token: userToken
+            }
+        }
+        else{
             request = {
                 tag: tag,
                 user_token: userToken

@@ -1,6 +1,6 @@
 <template>
     <div class="option-wrapper">
-        <div class="chat-option" @click="sendOption(option.tag)"> 
+        <div class="chat-option" @click="sendOption(option)"> 
             {{option.label}}
         </div>
     </div>
@@ -12,21 +12,20 @@ export default{
         option:{
             type: Object,
             required: true
-        }
+        },
     },
     methods: {
-        sendOption(tag){
-            let selectedOption = {
-                tag: tag,
-                user_token: this.userToken
-            };
+        sendOption(selectedOption){  
             this.$store.dispatch('botModule/selectOption', selectedOption); 
-        }
+        },
     },
     computed:{
          userToken(){
-                return this.$store.getters['botModule/getUserToken'];
-            },
+            return this.$store.getters['botModule/getUserToken'];
+        },
+        category(){
+            return this.$store.getters['botModule/getCategory'];
+        }
     }
 
 
