@@ -10,7 +10,7 @@
                     <div class="bot-name">{{agentName}}</div>
                     <div class="support-available">Disponible ahora</div>
                     <div>
-                        <button class="close-button"><TimesIcon width="22" height="22" v-on:click="showWidget()"></TimesIcon></button>                    
+                        <button class="close-button"><AngleDownIcon width="22" height="22" v-on:click="showWidget()"></AngleDownIcon></button>                    
                     </div>
                     <whatsapp-button/>
                     <BusinessHours/>
@@ -65,7 +65,7 @@
 <script>
     import SendIcon from './icons/Paper-Plane-Solid.vue';
     import ChatButton from './buttons/ChatButton.vue';
-    import TimesIcon from './icons/Times-Solid.vue';
+    import AngleDownIcon from './icons/Angle-Down.vue';
     import AuthComponent from './Auth.vue';
     import BusinessHours from '@/components/buttons/BusinessHoursContainer.vue';
     import WhatsappButton from '@/components/buttons/WhatsappButton.vue';
@@ -78,7 +78,7 @@
         components:{
  
             SendIcon,
-            TimesIcon,
+            AngleDownIcon,
             AuthComponent,
             // Loading,
             NotificationContainer,
@@ -182,15 +182,15 @@
             listenRoomChannel(){
                 if(this.isUserAuth)
                 {
-                    this.roomInstance.join('chat').here(user => {
-                        console.log('Here...');
-                        console.log(user);
-                    }).joining(user => {
-                        console.log('Joining...');
-                        console.log(user);
-                    });
+                    // this.roomInstance.join('chat').here(user => {
+                    //     console.log('Here...');
+                    //     console.log(user);
+                    // }).joining(user => {
+                    //     console.log('Joining...');
+                    //     console.log(user);
+                    // });
 
-
+                    console.log("Private cahnel: "+ this.privateChannel);
                     if(this.privateChannel == null || this.privateChannel == '')
                     {
                        
@@ -200,33 +200,42 @@
                         this.$store.dispatch('UpdatePrivateChannel',chatbotChannel);     
                         this.connectToPrivateChannel(this.privateChannel);
                           //Mandar confimación de que ya se estableció la comunicación
-                        this.initConversation();
+                        setTimeout(()=>{
+                            if(this.privateChannel != null){
+                                this.initConversation();
+                            }
+                        },1000);
+                        
                         
                        
                           
                     }
-                    else{
+                    // else{
                         
-                        if(this.enabledChat)
-                        {
+                    //     if(this.enabledChat)
+                    //     {
                             
-                            if(!this.connectedToPrivate)
-                            {
-                                  this.connectToPrivateChannel(this.privateChannel);
-                            }
+                    //         if(!this.connectedToPrivate)
+                    //         {
+                    //               this.connectToPrivateChannel(this.privateChannel);
+                    //         }
                            
-                        }
+                    //     }
                        
-                    }
+                    // }
                     
 
+                }else{
+                    console.log("No esta la instancia");
                 }
-                
+                console.log(this.roomInstance);
             },
             connectToPrivateChannel(channel){
                 if(channel != null && channel != ''){
-
+// console.log("ME ESTOY CONECTADNDO");
                     this.roomInstance.private(channel).listen('ChatbotEvent', (event) => {
+                        
+                        console.log("Mensaje desde el canal"+ channel);
                         console.log(event);
                        this.$store.dispatch('botModule/botMessages', event); 
                        

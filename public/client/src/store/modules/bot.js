@@ -66,14 +66,14 @@ export const actions = {
         if(res.status == "success"){
             let data = res.data;
 
-            let messageData = {
-                messages : data.messages,
-                options: data.options,
-                video: data.video,
-                user:store.state.bot
+            // let messageData = {
+            //     messages : data.messages,
+            //     options: data.options,
+            //     video: data.video,
+            //     user:store.state.bot
 
-            };
-            commit("SET_MESSAGES_BOT", messageData);
+            // };
+            // commit("SET_MESSAGES_BOT", messageData);
             commit("SET_USERTOKEN", data.token);
             dispatch("chat/enabledChat", true,{ root: true });
         }else{
@@ -155,9 +155,7 @@ export const actions = {
 
         messages = event.message.messages;
         console.log(event.message.options);
-        if(typeof event.message.options !== 'undefined'){
-            options = event.message.options;
-        }
+       
         if(typeof event.message.video !== 'undefined'){
             video = event.video
         }
@@ -168,20 +166,48 @@ export const actions = {
             commit("SET_CATEGORY", event.message.id_category);
         }
 
-        
-
-        messages.forEach((message) => {
-            console.log(message.message)
-            let data = {
-                messages:message.message,
-                options: options,
-                video: video,
-                user:store.state.bot
-            };
-            console.log(data);
+        if(typeof event.message.messages !== 'undefined'){
+            messages.forEach(function(message, index){
             
-            commit("SET_MESSAGES_BOT", data);
-        });
+                setTimeout(()=>{
+                    console.log(message.message)
+                    let data = {
+                        messages:message.message,
+                        options: null,
+                        video: video,
+                        user:store.state.bot
+                    };
+                    console.log(data);
+                    
+                    commit("SET_MESSAGES_BOT", data);
+                },2000 * index);
+            });
+        }
+
+        
+       
+
+        if(typeof event.message.options !== 'undefined'){
+            options = event.message.options;
+            setTimeout(()=>{
+                
+                let data = {
+                    messages:null,
+                    options: options,
+                    video: null,
+                    user:store.state.bot
+                };
+                console.log(data);
+                
+                commit("SET_MESSAGES_BOT", data);
+            },2000 * (event.message.messages.length+1));
+           
+        }
+
+        // messages.forEach((message) => {
+            
+            
+        // });
 
        
 
