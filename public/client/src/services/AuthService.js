@@ -26,7 +26,7 @@ export default{
             bot_id: process.env.VUE_APP_BOT_ID,
             
         };
-        console.log(request);
+        // console.log(request);
         return apiClient.post('auth/register', request);
     }
 

@@ -42,6 +42,7 @@
                                 </div>
                                 
                             </div>
+                            
                     </div>                    
                 </div>
                 
@@ -50,6 +51,7 @@
                     <AuthComponent></AuthComponent>
                     
                 </div>
+                <Dots></Dots>
                 <div class="input-bar">
                     <input @keydown.enter.prevent="sendMessage" v-model="newMessage" placeholder="Type your message here!" type="text" :disabled="!enabledChat">
                     <button class="send-button"><SendIcon width="22" height="22" @click="sendMessage"></SendIcon></button>
@@ -72,6 +74,7 @@
     import NotificationContainer from '@/components/NotificationContainer.vue';
     import OptionButton from '@/components/buttons/OptionButton.vue';
     import Youtube from '@/components/YouTube.vue';
+    import Dots from '@/components/extras/Dots.vue';
     // import Loading from 'vue-loading-overlay';
     export default {
         name: 'Chat',
@@ -86,7 +89,8 @@
             WhatsappButton,
             ChatButton,
             OptionButton,
-            Youtube
+            Youtube,
+            Dots
         },
         data(){
             return {
@@ -104,7 +108,7 @@
             this.initWidget();
             this.fetchMessages();
             this.listenRoomChannel();
-            console.log(this.Messages);
+            // console.log(this.Messages);
             
         },
         
@@ -190,7 +194,7 @@
                     //     console.log(user);
                     // });
 
-                    console.log("Private cahnel: "+ this.privateChannel);
+                    // console.log("Private cahnel: "+ this.privateChannel);
                     if(this.privateChannel == null || this.privateChannel == '')
                     {
                        
@@ -204,7 +208,7 @@
                             if(this.privateChannel != null){
                                 this.initConversation();
                             }
-                        },1000);
+                        },900);
                         
                         
                        
@@ -225,10 +229,8 @@
                     // }
                     
 
-                }else{
-                    console.log("No esta la instancia");
                 }
-                console.log(this.roomInstance);
+                // console.log(this.roomInstance);
             },
             connectToPrivateChannel(channel){
                 if(channel != null && channel != ''){

@@ -90,6 +90,7 @@ color: #42b983 !important;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23) !important;
     background: #FFF !important;
     bottom: 50px !important;
+    line-height: 1.3 !important;
 }
 #app-chat .middle{
     position: absolute !important;
@@ -109,7 +110,7 @@ color: #42b983 !important;
 #app-chat .chat-window .messages .message{
     box-sizing: border-box !important;
     padding: 0.5em 1em !important;
-    margin: 0.6em 1em !important;
+    margin: 0.1em 1em !important;
     background: #FFF !important;
     border-radius: 1.125em 1.125em 1.125em 0 !important;
     min-height: 2.25em !important;

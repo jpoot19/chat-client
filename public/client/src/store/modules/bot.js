@@ -81,15 +81,15 @@ export const actions = {
         }
     },
     initOptions({commit}, options ){
-        console.log(options);
+        // console.log(options);
         commit("SET_OPTIONS", options);
     },
     addUserBotToken({commit}, token){
-        console.log(token);
+        // console.log(token);
         commit("SET_USERTOKEN", token);
     },
     addBotVideo({commit}, video){
-        console.log(video);
+        // console.log(video);
         commit("SET_VIDEO", video);
     },
     async sendMessage({commit, dispatch}, message){
@@ -108,7 +108,7 @@ export const actions = {
         
         let response = await ChatService.sendBotMessage(userToken, message.tag, message.user_input);
         let res = response.data;
-        console.log(res);
+        // console.log(res);
         if(res.status === 'success'){
             // if(res.data.next_tag != null || res.data.next_tag == ''){
             //     commit("SET_NEXT_TAG", res.data.next_tag);
@@ -128,9 +128,9 @@ export const actions = {
     },
     async fetchMessages({commit}){
         var res = await ChatService.fetchMessages();
-        console.log(res);
+        // console.log(res);
         let messages = res.data;
-        console.log(messages);
+        // console.log(messages);
 
         messages.forEach(message => {
             let data = {
@@ -151,10 +151,8 @@ export const actions = {
         let messages = [];
         let options = null;
         let video = '';
-    
-
         messages = event.message.messages;
-        console.log(event.message.options);
+        // console.log(event.message.options);
        
         if(typeof event.message.video !== 'undefined'){
             video = event.video
@@ -166,27 +164,25 @@ export const actions = {
             commit("SET_CATEGORY", event.message.id_category);
         }
 
-        if(typeof event.message.messages !== 'undefined'){
+        let msgLength = 0;
+        if(typeof event.message.messages !== 'undefined' && event.message.messages != null){
             messages.forEach(function(message, index){
             
                 setTimeout(()=>{
-                    console.log(message.message)
+                    // console.log(message.message)
                     let data = {
                         messages:message.message,
                         options: null,
                         video: video,
                         user:store.state.bot
                     };
-                    console.log(data);
+                    // console.log(data);
                     
                     commit("SET_MESSAGES_BOT", data);
                 },2000 * index);
             });
+            msgLength = messages.length;
         }
-
-        
-       
-
         if(typeof event.message.options !== 'undefined'){
             options = event.message.options;
             setTimeout(()=>{
@@ -197,31 +193,19 @@ export const actions = {
                     video: null,
                     user:store.state.bot
                 };
-                console.log(data);
+                // console.log(data);
                 
                 commit("SET_MESSAGES_BOT", data);
-            },2000 * (event.message.messages.length+1));
+            },2000 * (msgLength+1));
            
         }
-
-        // messages.forEach((message) => {
-            
-            
-        // });
-
-       
-
-        // let data = {
-        //     messages:message,
-        //     options: options,
-        //     video:video,
-        //     user:store.state.bot
-        // };
-
-        // console.log(data);
-        // commit("SET_MESSAGES_BOT", data);
-        // commit("SET_RECEIVER", message.user);
-        // dispatch("playNotificationAlert",{ root: true });
+        if(typeof event.message.id_category !== 'undefined'){
+            commit("SET_CATEGORY", event.message.id_category);
+        }
+        if(typeof event.message.next_tag !== 'undefined'){
+            commit("SET_NEXT_TAG", event.message.next_tag);
+        }
+        
 
     },
     async selectOption({commit, dispatch}, selectedOption){
@@ -236,8 +220,8 @@ export const actions = {
                 tag: selectedOption.tag,
                 user_token: store.getters['botModule/getUserToken']
             };
-            console.log("Opcion env9iada");
-            console.log(option);
+            // console.log("Opcion env9iada");
+            // console.log(option);
         }else if(typeof selectedOption.id_subcategory !== 'undefined'){
             if(store.getters['botModule/getCategory']!= null){
                 option = {
@@ -247,8 +231,6 @@ export const actions = {
                     user_token: store.getters['botModule/getUserToken']
                 }
                 commit("SET_SUBCATEGORY", selectedOption.id_subcategory);
-            }else{
-                console.log("Sin categoria seleccionada");
             }
             
         }else if(typeof selectedOption.id_faq !== 'undefined'){
@@ -285,42 +267,76 @@ export const actions = {
         var response = await ChatService.sendTag(option);
         
         let res = response.data;
-        console.log(res);
+        // console.log(res);
         if(res.status == "success")
         {
-            if(res.data.messages != null){
-                let messages = res.data.messages;
-                console.log(messages),
-                messages.forEach((message) => {
-                    console.log(message.message)
-                    let data = {
-                        messages:message.message,
-                        options: res.data.options,
-                        video:res.data.video,
-                        user:store.state.bot
-                    };
-                    console.log(data);
-                    
-                    commit("SET_MESSAGES_BOT", data);
-                });
-            }else{
-                let data = {
-                    messages:null,
-                    options: res.data.options,
-                    video:res.data.video,
-                    user:store.state.bot
-                };
-                console.log(data);
+            // if(res.data.messages != null){
+            //     const messages = res.data.messages;
+            //     // console.log(messages),
+
+            //     messages.forEach(function(message, index){
+            //         setTimeout(()=>{
+            //             // console.log(message.message)
+            //             let data = {
+            //                 messages:message.message,
+            //                 options: null,
+            //                 video:res.data.video,
+            //                 user:store.state.bot
+            //             };
+            //             // console.log(data);
+                        
+            //             commit("SET_MESSAGES_BOT", data);
+            //         },2000 * index);
+            //     });
+
+            //     if(typeof messages.options !== 'undefined'){
+            //         const options = messages.options;
+            //         setTimeout(()=>{
                 
-                commit("SET_MESSAGES_BOT", data);
-            }
+            //             let data = {
+            //                 messages:null,
+            //                 options: options,
+            //                 video: null,
+            //                 user:store.state.bot
+            //             };
+            //             // console.log(data);
+                        
+            //             commit("SET_MESSAGES_BOT", data);
+            //         },2000 * (messages.length+1));
+            //     }
+            
+              
+
+            //     messages.forEach((message) => {
+            //         // console.log(message.message)
+            //         let data = {
+            //             messages:message.message,
+            //             options: res.data.options,
+            //             video:res.data.video,
+            //             user:store.state.bot
+            //         };
+            //         // console.log(data);
+                    
+            //         commit("SET_MESSAGES_BOT", data);
+            //     });
+            // }else{
+            //     let data = {
+            //         messages:null,
+            //         options: res.data.options,
+            //         video:res.data.video,
+            //         user:store.state.bot
+            //     };
+            //     // console.log(data);
+                
+            //     commit("SET_MESSAGES_BOT", data);
+            // }
             
 
-            if(typeof res.data.id_category !== 'undefined'){
-                commit("SET_CATEGORY", res.data.id_category);
-            }
+            // if(typeof res.data.id_category !== 'undefined'){
+            //     commit("SET_CATEGORY", res.data.id_category);
+            // }
 
-            commit("SET_NEXT_TAG", res.data.next_tag);
+            // commit("SET_NEXT_TAG", res.data.next_tag);
             
             // console.log(res);
             return true;
@@ -332,7 +348,7 @@ export const actions = {
                 timeout: true,
               }
               dispatch('notification/add', notification, { root: true });
-              console.log("Hubo un error");
+            //   console.log("Hubo un error");
               return false;
         }
         

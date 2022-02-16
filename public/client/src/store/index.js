@@ -63,13 +63,13 @@ export default createStore({
          
           commit("SET_USER", res);
 
-          const notification = {
-            type: 'success',
-            title: 'En un momento uno de nuestros asesores te atenderá, por favor espera',
-            message: '',
-            timeout: true,
-          }
-          dispatch('notification/add', notification, { root: true });
+          // const notification = {
+          //   type: 'success',
+          //   title: 'En un momento uno de nuestros asesores te atenderá, por favor espera',
+          //   message: '',
+          //   timeout: true,
+          // }
+          // dispatch('notification/add', notification, { root: true });
          
           return true;
         }else{
