@@ -23,10 +23,12 @@
 
                             <div class="messages " v-for="message in Messages" :key="message.id">     
                                 <div class="message sender" v-if="message.user.uuid != user.uuid && message.message != null">
-                                    {{message.message}} 
+                                      <span v-html="urlify(message.message)"></span>
+                                    <!-- {{message.message}}  -->
                                 </div>
                                 <div class="message receiver" v-if="message.user.uuid == user.uuid">
-                                    {{message.message}}
+                                    <!-- {{message.message}} -->
+                                      <span v-html="urlify(message.message)"></span>
                                 </div>
                                 <div v-if="message.video != null && message.user.uuid != user.uuid && message.video != '' " >
                                     <!-- {{message.video}} -->
@@ -51,7 +53,7 @@
                     <AuthComponent></AuthComponent>
                     
                 </div>
-                <Dots></Dots>
+                <!-- <Dots></Dots> -->
                 <div class="input-bar">
                     <input @keydown.enter.prevent="sendMessage" v-model="newMessage" placeholder="Type your message here!" type="text" :disabled="!enabledChat">
                     <button class="send-button"><SendIcon width="22" height="22" @click="sendMessage"></SendIcon></button>
@@ -74,7 +76,7 @@
     import NotificationContainer from '@/components/NotificationContainer.vue';
     import OptionButton from '@/components/buttons/OptionButton.vue';
     import Youtube from '@/components/YouTube.vue';
-    import Dots from '@/components/extras/Dots.vue';
+    // import Dots from '@/components/extras/Dots.vue';
     // import Loading from 'vue-loading-overlay';
     export default {
         name: 'Chat',
@@ -90,7 +92,7 @@
             ChatButton,
             OptionButton,
             Youtube,
-            Dots
+            // Dots
         },
         data(){
             return {
@@ -143,6 +145,12 @@
             showWidget(){
                 this.showChat = !this.showChat;
             },
+            urlify(text){
+                const urlRegex = /(https?:\/\/[^\s]+)/g;
+                return text.replace(urlRegex, function(url) {
+                    return '<a href="' + url + '" target="_blank" >' + url + '</a>';
+                });
+            },
             fetchMessages(){
                 if(this.enabledChat){
 
@@ -155,16 +163,18 @@
                 let isValidForm = this.validateForm();
                 if(isValidForm){
 
-                    // verificar si hay un siguiente tag
-                    if(this.nextTag != null || this.nextTag != ''){
 
-                        let data = {
-                            tag: this.nextTag,
+                    let data = {
                             user_input: this.newMessage
                         };
-                        this.$store.dispatch('botModule/sendMessage',data);
+                    // verificar si hay un siguiente tag
+                    if(this.nextTag){
+
+                        
+                       data['tag']=this.nextTag;
 
                     }
+                     this.$store.dispatch('botModule/sendMessage',data);
                     
                     this.newMessage = '';
 

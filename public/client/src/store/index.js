@@ -10,7 +10,7 @@ window.Pusher = require('pusher-js');
 import * as notification from '@/store/modules/notification.js'
 
 const persistent = new createPersistedState({
-  paths: ['user','bot', 'channel', 'isUserAuth','authToken', 'chat']
+  paths: ['user','bot', 'channel', 'isUserAuth','authToken', 'chat', 'botModule']
 });
 
 export default createStore({

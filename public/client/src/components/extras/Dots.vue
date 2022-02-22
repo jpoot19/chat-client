@@ -8,7 +8,7 @@
 <style scoped>
     div#wave {
         position: relative;
-        margin-top: 14em;
+        margin-top: 0;
         text-align: center;
         /* width: 100px;
         height: 100px; */

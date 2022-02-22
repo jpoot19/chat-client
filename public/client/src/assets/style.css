@@ -115,7 +115,8 @@ color: #42b983 !important;
     border-radius: 1.125em 1.125em 1.125em 0 !important;
     min-height: 2.25em !important;
     width: fit-content !important;
-    max-width: 66% !important;       
+    max-width: 66% !important; 
+    word-break: break-word;      
     box-shadow: 0 0 2em rgb(0 0 0 / 8%), 0em 1em 1em -1em rgb(0 0 0 / 10%) !important;
 }
 #app-chat .chat-window .messages .message.receiver{
