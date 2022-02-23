@@ -27,6 +27,7 @@ export const mutations = {
         state.messages.push({
             message: data.messages,
             options:data.options,
+            questions:data.questions !== 'undefined' ? data.questions:null,
             video: data.video,
             user:data.user
         });
@@ -150,6 +151,7 @@ export const actions = {
         //Validar evento
         let messages = [];
         let options = null;
+
         let video = '';
         messages = event.message.messages;
         // console.log(event.message.options);
@@ -198,6 +200,18 @@ export const actions = {
                 commit("SET_MESSAGES_BOT", data);
             },2000 * (msgLength+1));
            
+        }
+        if(typeof event.message.questions !== 'undefined'){
+            let data = {
+                messages:null,
+                options: null,
+                questions: event.message.questions,
+                video: null,
+                user:store.state.bot
+            };
+            // console.log(data);
+            
+            commit("SET_MESSAGES_BOT", data);
         }
         if(typeof event.message.id_category !== 'undefined'){
             commit("SET_CATEGORY", event.message.id_category);
