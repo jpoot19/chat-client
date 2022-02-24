@@ -402,6 +402,16 @@ color: #42b983 !important;
 }
 #app-chat .option-wrapper{
     margin: 8px 8px 0 8px;
+    padding: 0em 0.5em;
+}
+
+/*Select 2 Container*/
+.select2{
+    margin: 0 1em;
+}
+.select2-container{
+    width: 15em !important;
+    
 }
 
 @keyframes moveOpen 

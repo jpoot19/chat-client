@@ -9,6 +9,7 @@ export const state = {
     userbotToken:'',
     next_tag: '',
     messages:[],
+    questions:[],
     category: null,
     subcategory:null,
     faq:null,
@@ -31,6 +32,9 @@ export const mutations = {
             video: data.video,
             user:data.user
         });
+    },
+    SET_QUESTIONS(state,data){
+        state.questions = data;
     },
     SET_USERTOKEN(state,data){
         state.userbotToken = data;
@@ -209,9 +213,10 @@ export const actions = {
                 video: null,
                 user:store.state.bot
             };
-            // console.log(data);
-            
             commit("SET_MESSAGES_BOT", data);
+            // // console.log(data);
+            
+            commit("SET_QUESTIONS", event.message.questions);
         }
         if(typeof event.message.id_category !== 'undefined'){
             commit("SET_CATEGORY", event.message.id_category);
@@ -391,5 +396,12 @@ export const getters ={
     },
     getCountry: state => {
         return state.country_code;
+    },
+    getQuestions: state => {
+        let questions =[];
+        state.questions.forEach((question) => {
+            questions.push({id:question.id_faq, text:question.label, require_country: question.require_country, country_code: question.country_code});
+        });
+        return questions;
     }
 }

@@ -42,6 +42,10 @@
                                         :option="option"
                                      />
                                 </div>
+                                <div v-if="questions != null && questions.length > 0 && message.user.uuid != user.uuid && message.questions != null" >
+                                    <!-- {{"aqui deben ir las preguntas"}} -->
+                                    <Select2 v-model="questions" :options="questions" @select="selectQuestion($event, message.questions)"></Select2>
+                                </div>
                                 
                             </div>
                             
@@ -76,12 +80,13 @@
     import NotificationContainer from '@/components/NotificationContainer.vue';
     import OptionButton from '@/components/buttons/OptionButton.vue';
     import Youtube from '@/components/YouTube.vue';
+    import Select2 from 'vue3-select2-component';
     // import Dots from '@/components/extras/Dots.vue';
     // import Loading from 'vue-loading-overlay';
     export default {
         name: 'Chat',
         components:{
- 
+            Select2,
             SendIcon,
             AngleDownIcon,
             AuthComponent,
@@ -104,6 +109,8 @@
                 isLoading: !this.enabledChat,
                 agentName: 'Chatea con un Agente',
                 connectedToPrivate: false,
+                questionMode:'Selecciona una pregunta',
+                // questions:['efren', 'jose', 'pachon']
             }
         },
         created(){
@@ -158,6 +165,10 @@
 
                 }
                 
+            },
+            selectQuestion(event, questions){
+                let seletedQuestion = questions.find(q => q.id_faq == event.id);
+                this.$store.dispatch('botModule/selectOption', seletedQuestion); 
             },
             sendMessage(){
                 let isValidForm = this.validateForm();
@@ -247,8 +258,8 @@
 // console.log("ME ESTOY CONECTADNDO");
                     this.roomInstance.private(channel).listen('ChatbotEvent', (event) => {
                         
-                        console.log("Mensaje desde el canal"+ channel);
-                        console.log(event);
+                        // console.log("Mensaje desde el canal"+ channel);
+                        // console.log(event);
                        this.$store.dispatch('botModule/botMessages', event); 
                        
                     });
@@ -282,6 +293,10 @@
                 return this.$store.getters['getUser'];
             },
            
+            questions(){
+                // return this.$store.getters['getQuestions'];
+                return this.$store.getters['botModule/getQuestions'];
+            },
             isUserAuth(){
                 return this.$store.state.isUserAuth;
             },

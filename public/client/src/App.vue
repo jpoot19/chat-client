@@ -16,6 +16,7 @@
         </audio> -->
     <!-- <video src="https://www.youtube.com/watch?v=vbYdaMYLHks" id="video-container" controls></video> -->
     <!-- <Youtube></Youtube> -->
+    <Select2 v-model="questionLabel" :options="questions"   @select="mySelectEvent($event)"></Select2>
     <Chat></Chat>
   <!-- <Dots></Dots> -->
   </div>
@@ -24,6 +25,7 @@
 <script>
 // import Dots from '@/components/extras/Dots.vue';
 import Chat from './components/Chat.vue'
+import Select2 from 'vue3-select2-component';
 // import Youtube from '@/components/YouTube.vue'
 
 
@@ -31,9 +33,24 @@ export default {
   name: 'App',
   components: {
     Chat,
+    Select2
     // Dots
     // Youtube
-  }
+  },
+  data(){
+    return{
+      questionLabel:'Selecciona una pregunta',
+                questions:[{id: 1, text: 'efren'}, {id: 2, text: 'jose'}, {id: 3, text: 'efrensds'}]
+    }
+  },
+   methods: {
+        myChangeEvent(val){
+            console.log(val);
+        },
+        mySelectEvent({id, text}){
+            console.log({id, text})
+        }
+    }
 }
 </script>
 
