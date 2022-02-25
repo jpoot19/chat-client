@@ -87,6 +87,32 @@ export default createStore({
 
 
     },
+    async InitUser({commit, dispatch}){
+
+       return new Promise((resolve, reject) => {
+        AuthService.InitUser().then((response) => {
+          let res = response.data;
+          if(res.status == "success"){
+           commit("SET_USER", res);
+           resolve(true);
+          }else{
+           reject();
+          }
+       }).catch((e) => {
+         console.log(e);
+         const notification = {
+           type: 'error',
+           title: 'Oops! Ocurrió un error',
+           message: e.message,
+           timeout: true,
+         }
+         dispatch('notification/add', notification, { root: true });
+         reject();
+       });
+       });
+
+    },
+
     async UpdatePrivateChannel({commit}, channel){
       // console.log(channel);
       commit("SET_CHANNEL", channel);

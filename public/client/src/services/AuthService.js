@@ -28,6 +28,16 @@ export default{
         };
         // console.log(request);
         return apiClient.post('auth/register', request);
+    },
+    InitUser(){
+        let request = {
+            botId: process.env.VUE_APP_BOT_ID
+        }
+        return apiClient.post('clients',request,{
+            headers:{
+                'Authorization': 'Bearer '+ process.env.VUE_APP_BOT_TOKEN
+            }
+        });
     }
 
 }

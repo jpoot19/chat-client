@@ -16,7 +16,7 @@
                     <BusinessHours/>
                 </div>
                 <NotificationContainer/>
-                <div v-if="isUserAuth">
+                <!-- <div > -->
 
                     <div class="middle" ref="formContainer"  v-chat-scroll id="box">
                          <!-- <loading v-model:active="isLoading" :is-full-page="false" /> -->
@@ -44,19 +44,19 @@
                                 </div>
                                 <div v-if="questions != null && questions.length > 0 && message.user.uuid != user.uuid && message.questions != null" >
                                     <!-- {{"aqui deben ir las preguntas"}} -->
-                                    <Select2 v-model="questions" :options="questions" @select="selectQuestion($event, message.questions)"></Select2>
+                                    <Select2 v-model="questions" :options="questions" @select="selectQuestion($event, message.questions)" placeholder="Selecciona una pregunta"></Select2>
                                 </div>
                                 
                             </div>
                             
                     </div>                    
-                </div>
+                <!-- </div> -->
                 
-                 <div class="messages" v-if="!isUserAuth">
+                 <!-- <div class="messages" v-if="!isUserAuth">
                      
                     <AuthComponent></AuthComponent>
                     
-                </div>
+                </div> -->
                 <!-- <Dots></Dots> -->
                 <div class="input-bar">
                     <input @keydown.enter.prevent="sendMessage" v-model="newMessage" placeholder="Type your message here!" type="text" :disabled="!enabledChat">
@@ -74,7 +74,7 @@
     import SendIcon from './icons/Paper-Plane-Solid.vue';
     import ChatButton from './buttons/ChatButton.vue';
     import AngleDownIcon from './icons/Angle-Down.vue';
-    import AuthComponent from './Auth.vue';
+    // import AuthComponent from './Auth.vue';
     import BusinessHours from '@/components/buttons/BusinessHoursContainer.vue';
     import WhatsappButton from '@/components/buttons/WhatsappButton.vue';
     import NotificationContainer from '@/components/NotificationContainer.vue';
@@ -89,7 +89,7 @@
             Select2,
             SendIcon,
             AngleDownIcon,
-            AuthComponent,
+            // AuthComponent,
             // Loading,
             NotificationContainer,
             BusinessHours,
@@ -115,6 +115,7 @@
         },
         created(){
             this.initWidget();
+            this.initChat();
             this.fetchMessages();
             this.listenRoomChannel();
             // console.log(this.Messages);
@@ -142,7 +143,15 @@
             initWidget(){
                 this.$store.dispatch('initWidget');
             },
+            initChat(){
+                //If user is not authentificated init empty user by default
+                if(!this.isUserAuth){
+                    this.$store.dispatch('InitUser');
+                }
+                    
+            },
             initConversation(){
+                
                 if(!this.enabledChat)
                 {
                     this.$store.dispatch('botModule/establishCommunication');
