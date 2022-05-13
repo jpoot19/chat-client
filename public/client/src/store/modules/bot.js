@@ -14,7 +14,8 @@ export const state = {
     subcategory:null,
     faq:null,
     require_country:false,
-    country_code:null
+    country_code:null,
+
 }
 
 export const mutations = {
@@ -57,7 +58,8 @@ export const mutations = {
     },
     SET_REQUIRE_COUNTRY(state, require_country){
         state.require_country = require_country;
-    }
+    },
+   
 
 
 }
@@ -97,7 +99,7 @@ export const actions = {
         // console.log(video);
         commit("SET_VIDEO", video);
     },
-    async sendMessage({commit, dispatch}, message){
+    async sendMessage({commit}, message){
 
 
         let data = {
@@ -120,14 +122,14 @@ export const actions = {
             // }
             return true;
         }else{
-            const notification = {
-                type: 'error',
-                title: 'Oops! Ocurrió un error',
-                message: res.message,
-                timeout: true,
-              }
-              dispatch('notification/add', notification, { root: true });
-              console.log("Hubo un error");
+            // const notification = {
+            //     type: 'error',
+            //     title: 'Oops! Ocurrió un error',
+            //     message: res.message,
+            //     timeout: true,
+            //   }
+            //   dispatch('notification/add', notification, { root: true });
+            //   console.log("Hubo un error");
               return false;
         }
     },
@@ -158,11 +160,9 @@ export const actions = {
 
         let video = '';
         messages = event.message.messages;
-        // console.log(event.message.options);
+        // console.log(event.message.video);
        
-        if(typeof event.message.video !== 'undefined'){
-            video = event.video
-        }
+        
         if(typeof event.message.next_tag !== 'undefined'){
             commit("SET_NEXT_TAG", event.message.next_tag);
         }
@@ -171,6 +171,21 @@ export const actions = {
         }
 
         let msgLength = 0;
+        if(typeof event.message.video !== 'undefined'){
+            video = event.message.video
+           
+                // console.log(message.message)
+                let data = {
+                    messages:null,
+                    options: null,
+                    video: video,
+                    user:store.state.bot
+                };
+                // console.log(data);
+                
+                commit("SET_MESSAGES_BOT", data);
+           
+        }
         if(typeof event.message.messages !== 'undefined' && event.message.messages != null){
             messages.forEach(function(message, index){
             
@@ -179,7 +194,7 @@ export const actions = {
                     let data = {
                         messages:message.message,
                         options: null,
-                        video: video,
+                        video: null,
                         user:store.state.bot
                     };
                     // console.log(data);
@@ -189,6 +204,7 @@ export const actions = {
             });
             msgLength = messages.length;
         }
+        
         if(typeof event.message.options !== 'undefined'){
             options = event.message.options;
             setTimeout(()=>{
@@ -358,6 +374,7 @@ export const actions = {
             // commit("SET_NEXT_TAG", res.data.next_tag);
             
             // console.log(res);
+            // dispatch('optionsToggle',{root:true});
             return true;
         }else{
             const notification = {
@@ -371,7 +388,8 @@ export const actions = {
               return false;
         }
         
-    }
+    },
+    
 
 }
 
@@ -403,5 +421,8 @@ export const getters ={
             questions.push({id:question.id_faq, text:question.label, require_country: question.require_country, country_code: question.country_code});
         });
         return questions;
+    },
+    optionStatus: state => {
+        return state.optionActive;
     }
 }

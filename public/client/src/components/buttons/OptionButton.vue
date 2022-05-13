@@ -1,8 +1,8 @@
 <template>
     <div class="option-wrapper">
-        <div class="chat-option" @click="sendOption(option)"> 
+        <v-button class="chat-option" @click.once="sendOption(option)" :disabled="true"> 
             {{option.label}}
-        </div>
+        </v-button>
     </div>
 </template>
 
@@ -15,8 +15,10 @@ export default{
         },
     },
     methods: {
-        sendOption(selectedOption){  
+        sendOption(selectedOption){
+           
             this.$store.dispatch('botModule/selectOption', selectedOption); 
+            
         },
     },
     computed:{
@@ -25,7 +27,8 @@ export default{
         },
         category(){
             return this.$store.getters['botModule/getCategory'];
-        }
+        },
+       
     }
 
 

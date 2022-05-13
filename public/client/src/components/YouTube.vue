@@ -2,7 +2,7 @@
     <div class="embed-responsive embed-responsive-16by9">
         <iframe id="player" type="text/html" width="640" height="360"
             :src="getUrlVideo(url)"
-            frameborder="0" class="embed-responsive-item"></iframe>
+            frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" class="embed-responsive-item"></iframe>
     </div>
     
 </template>

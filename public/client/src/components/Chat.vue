@@ -44,7 +44,7 @@
                                 </div>
                                 <div v-if="questions != null && questions.length > 0 && message.user.uuid != user.uuid && message.questions != null" >
                                     <!-- {{"aqui deben ir las preguntas"}} -->
-                                    <Select2 v-model="questions" :options="questions" @select="selectQuestion($event, message.questions)" placeholder="Selecciona una pregunta"></Select2>
+                                    <Select2 v-model="questions" :options="questions" @select="selectQuestion($event, message.questions)" :settings="{containerCssClass:'hola'}" placeholder="Selecciona una pregunta"></Select2>
                                 </div>
                                 
                             </div>
@@ -268,7 +268,7 @@
                     this.roomInstance.private(channel).listen('ChatbotEvent', (event) => {
                         
                         // console.log("Mensaje desde el canal"+ channel);
-                        // console.log(event);
+                        console.log(event);
                        this.$store.dispatch('botModule/botMessages', event); 
                        
                     });
